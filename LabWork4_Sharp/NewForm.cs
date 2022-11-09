@@ -104,20 +104,16 @@ namespace LabWork4_Sharp
 
         private void buttonDelete_Click(object sender, EventArgs e)
         {
-            foreach (Item item in list)
+            /*foreach (Item item in list)
             {
                 if (item._treeNode == Tree.SelectedNode)
                 {
                     for(int i = 0; i < item._treeNode.Nodes.Count; i++)
                     {
-                        foreach (Item item in list)
-                        {
-
-                        }
                     }
 
 
-                    int temp = delete.cluster;
+                    //int temp = delete.cluster;
                     int next = _cells.arr[temp];
                     item.cluster = -3;
                     while(next != -2)
@@ -130,7 +126,7 @@ namespace LabWork4_Sharp
                 }
             }
             Tree.Nodes.Remove(Tree.SelectedNode);
-            Draw(-1);
+            Draw(-1);*/
         }
     }
 }

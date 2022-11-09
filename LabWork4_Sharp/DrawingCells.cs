@@ -26,8 +26,8 @@ namespace LabWork4_Sharp
             {
                 arr[i] = -1;
             }
-            ost = size - ((size / (picWidth / cellsSize) * (picWidth / cellsSize)));
             lineSize = picWidth / cellsSize;
+            ost = size - ((size / lineSize * lineSize));
         }
 
         public void Drawing(Graphics g, int temp)
@@ -36,7 +36,6 @@ namespace LabWork4_Sharp
             Brush br = new SolidBrush(Color.LightGray);
             Brush brBlue = new SolidBrush(Color.Blue);
             Brush brRed = new SolidBrush(Color.RebeccaPurple);
-
 
             int j = 0;
             int i = 0;
