@@ -14,22 +14,33 @@ namespace LabWork4_Sharp
     {
         public int _size;
         public DrawingCells _cells;
-        LinkedList<Item> list;
+        Item[] files;
         public NewForm(int size)
         {
             InitializeComponent();
-            list = new LinkedList<Item>();
+            files = new Item[size];
             _size = size;
             _cells = new DrawingCells(pictureBoxCells.Width, pictureBoxCells.Height, _size);
             Draw(-1);
         }
         
-        private void Draw(int first)
+        private void Draw(int index)
         {
             Bitmap bmp = new(pictureBoxCells.Width, pictureBoxCells.Height);
             Graphics gr = Graphics.FromImage(bmp);
-            _cells.Drawing(gr, first);
+            _cells.Drawing(gr, files, index);
             pictureBoxCells.Image = bmp;
+        }
+
+        private bool Check(int neededKol)
+        {
+            int kol = 0;
+            for (int i = 0; i < _cells.arr.Length; i++)
+            {
+                if (_cells.arr[i] == -2) kol++;
+            }
+            if (neededKol <= kol) return true;
+            return false;
         }
 
         private void buttonCreate_Click(object sender, EventArgs e)
@@ -44,24 +55,31 @@ namespace LabWork4_Sharp
 
                 Item newItem = new(newNode);
 
-                int i = rnd.Next(_cells.arr.Length);
-                newItem.cluster = i;
-                _cells.arr[i] = -2;
-                kolCells--;
-
-                int temp = i;
-                while (kolCells >= 0)
+                int i = 0;
+                while(_cells.arr[i] != -2)
                 {
                     i = rnd.Next(_cells.arr.Length);
-                    if (_cells.arr[i] == -1)
+                }              
+                newItem.cluster = i;
+                _cells.arr[i] = -1;
+                kolCells--;
+
+                int temp = newItem.cluster;
+                while (kolCells > 0)
+                {
+                    i = rnd.Next(_cells.arr.Length);
+                    if (_cells.arr[i] == -2)
                     {
                         _cells.arr[temp] = i;
-                        _cells.arr[i] = -2;
+                        _cells.arr[i] = -1;
                         kolCells--;
                         temp = i;
                     }
                 }
-                list.AddLast(newItem);
+                for(i = 0; i < files.Length; i++)
+                {
+                    if (files[i] == null) files[i] = newItem;
+                }
 
                 if (Tree.Nodes.Count == 0)
                 {
@@ -80,24 +98,13 @@ namespace LabWork4_Sharp
             }           
         }
 
-        private bool Check(int neededKol)
-        {
-            int kol = 0;
-            for(int i = 0; i < _cells.arr.Length; i++)
-            {
-                if (_cells.arr[i] == -1) kol++;
-            }
-            if (neededKol <= kol) return true;
-            return false;
-        }
-
         private void Tree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
-            foreach(Item item in list)
+            for(int i = 0; i < files.Length; i++)
             {
-                if(item._treeNode == Tree.SelectedNode)
+                if (files[i]._treeNode == Tree.SelectedNode)
                 {
-                    Draw(item.cluster);
+                    Draw(files[i].cluster);
                 }
             }
         }

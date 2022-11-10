@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +14,13 @@ namespace LabWork4_Sharp
         private int picWidth;
         private int picHeight;
 
-        private int cellsSize = 20;
+        private int cellsSize = 40;
         private int ost;
         private int lineSize;
 
         public int[] arr;
+        // -1 - конец связанного 
+        // -2 - незанятая 
 
         public DrawingCells(int pictureBoxWidth, int pictureBoxHeight, int size)
         {
@@ -24,13 +29,14 @@ namespace LabWork4_Sharp
             arr = new int[size];
             for (int i = 0; i < arr.Length; i++)
             {
-                arr[i] = -1;
+                arr[i] = -2;
             }
             lineSize = picWidth / cellsSize;
+            //TODO проверка на то, что хватит места для отрисовки
             ost = size - ((size / lineSize * lineSize));
         }
 
-        public void Drawing(Graphics g, int temp)
+        public void Drawing(Graphics g, Item[] files, int Index)
         {           
             Pen pen = new(Color.Black);
             Brush br = new SolidBrush(Color.LightGray);
@@ -47,30 +53,59 @@ namespace LabWork4_Sharp
                     j++;
                     i = 0;
                 }
-
-                if (arr[kol] < 0)
-                {
-                    g.FillRectangle(br, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                    g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                }
-                else if (arr[kol] == temp)
-                {
-                    g.FillRectangle(brRed, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                    g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                    temp = arr[temp];
-                }
-                else 
-                {
-                    g.FillRectangle(brBlue, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                    g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                }
+                g.FillRectangle(br, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
                 i++;
                 kol++;
             }
-        }
-
-        public void DrawingLinked()
-        {
+            i = 0;
+            j = 0;
+            int index = 0;
+            int kolLineSize = 0; //количество целых lineSize относительно индекса первого кластера
+            for(int l = 0; l < files.Length; i++)
+            {
+                if (files[l] != null)
+                {
+                    index = files[l].cluster;
+                    while (true)
+                    {
+                        if (index < lineSize)
+                        {
+                            i = index;
+                        }
+                        else
+                        {
+                            j = index / lineSize;
+                            i = index - lineSize * j;
+                        }
+                        g.FillRectangle(brBlue, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                        g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                        if (arr[index] == -1) break;
+                        index = arr[index];
+                    }
+                }               
+            }
+            if(Index != -1)
+            {
+                i = 0;
+                j = 0;
+                while (true)
+                {
+                    if (Index < lineSize)
+                    {
+                        i = Index;
+                    }
+                    else
+                    {
+                        j = Index / lineSize;
+                        i = Index - lineSize * j;
+                    }
+                    g.FillRectangle(brRed, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                    g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                    if (arr[Index] == -1) break;
+                    Index = arr[Index];
+                }
+            }
             
         }
     }
