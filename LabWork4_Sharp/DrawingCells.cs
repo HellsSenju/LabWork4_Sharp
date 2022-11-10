@@ -14,7 +14,7 @@ namespace LabWork4_Sharp
         private int picWidth;
         private int picHeight;
 
-        private int cellsSize = 40;
+        private int cellsSize = 30;
         private int ost;
         private int lineSize;
 
@@ -36,7 +36,7 @@ namespace LabWork4_Sharp
             ost = size - ((size / lineSize * lineSize));
         }
 
-        public void Drawing(Graphics g, Item[] files, int Index)
+        public void Drawing(Graphics g, List<Item> files, int Index)
         {           
             Pen pen = new(Color.Black);
             Brush br = new SolidBrush(Color.LightGray);
@@ -62,7 +62,7 @@ namespace LabWork4_Sharp
             j = 0;
             int index = 0;
             int kolLineSize = 0; //количество целых lineSize относительно индекса первого кластера
-            for(int l = 0; l < files.Length; i++)
+            for(int l = 0; l < files.Count; l++)
             {
                 if (files[l] != null)
                 {

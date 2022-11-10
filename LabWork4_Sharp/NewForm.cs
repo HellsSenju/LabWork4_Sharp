@@ -14,11 +14,11 @@ namespace LabWork4_Sharp
     {
         public int _size;
         public DrawingCells _cells;
-        Item[] files;
+        List<Item> list;
         public NewForm(int size)
         {
             InitializeComponent();
-            files = new Item[size];
+            list = new List<Item>();
             _size = size;
             _cells = new DrawingCells(pictureBoxCells.Width, pictureBoxCells.Height, _size);
             Draw(-1);
@@ -28,7 +28,7 @@ namespace LabWork4_Sharp
         {
             Bitmap bmp = new(pictureBoxCells.Width, pictureBoxCells.Height);
             Graphics gr = Graphics.FromImage(bmp);
-            _cells.Drawing(gr, files, index);
+            _cells.Drawing(gr, list, index);
             pictureBoxCells.Image = bmp;
         }
 
@@ -56,10 +56,11 @@ namespace LabWork4_Sharp
                 Item newItem = new(newNode);
 
                 int i = 0;
-                while(_cells.arr[i] != -2)
+                do
                 {
                     i = rnd.Next(_cells.arr.Length);
-                }              
+                } while (_cells.arr[i] != -2);
+                
                 newItem.cluster = i;
                 _cells.arr[i] = -1;
                 kolCells--;
@@ -76,10 +77,7 @@ namespace LabWork4_Sharp
                         temp = i;
                     }
                 }
-                for(i = 0; i < files.Length; i++)
-                {
-                    if (files[i] == null) files[i] = newItem;
-                }
+                list.Add(newItem);
 
                 if (Tree.Nodes.Count == 0)
                 {
@@ -96,17 +94,6 @@ namespace LabWork4_Sharp
             {
                 MessageBox.Show("Недостаточно места", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }           
-        }
-
-        private void Tree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
-        {
-            for(int i = 0; i < files.Length; i++)
-            {
-                if (files[i]._treeNode == Tree.SelectedNode)
-                {
-                    Draw(files[i].cluster);
-                }
-            }
         }
 
         private void buttonDelete_Click(object sender, EventArgs e)
@@ -134,6 +121,17 @@ namespace LabWork4_Sharp
             }
             Tree.Nodes.Remove(Tree.SelectedNode);
             Draw(-1);*/
+        }
+
+        private void Tree_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (list[i]._treeNode == Tree.SelectedNode)
+                {
+                    Draw(list[i].cluster);
+                }
+            }
         }
     }
 }
