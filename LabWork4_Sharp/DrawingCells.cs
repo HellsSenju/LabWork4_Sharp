@@ -41,7 +41,7 @@ namespace LabWork4_Sharp
             Pen pen = new(Color.Black);
             Brush br = new SolidBrush(Color.LightGray);
             Brush brBlue = new SolidBrush(Color.Blue);
-            Brush brRed = new SolidBrush(Color.RebeccaPurple);
+            Brush brRed = new SolidBrush(Color.Red);
 
             int j = 0;
             int i = 0;
@@ -58,10 +58,8 @@ namespace LabWork4_Sharp
                 i++;
                 kol++;
             }
-            i = 0;
-            j = 0;
-            int index = 0;
-            int kolLineSize = 0; //количество целых lineSize относительно индекса первого кластера
+
+            int index;
             for(int l = 0; l < files.Count; l++)
             {
                 if (files[l] != null)
@@ -72,11 +70,12 @@ namespace LabWork4_Sharp
                         if (index < lineSize)
                         {
                             i = index;
+                            j = 0;
                         }
                         else
                         {
                             j = index / lineSize;
-                            i = index - lineSize * j;
+                            i = index - (lineSize * j);
                         }
                         g.FillRectangle(brBlue, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
                         g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
@@ -85,15 +84,14 @@ namespace LabWork4_Sharp
                     }
                 }               
             }
-            if(Index != -1)
+            if (Index != -1)
             {
-                i = 0;
-                j = 0;
                 while (true)
                 {
                     if (Index < lineSize)
                     {
                         i = Index;
+                        j = 0;
                     }
                     else
                     {
@@ -105,8 +103,7 @@ namespace LabWork4_Sharp
                     if (arr[Index] == -1) break;
                     Index = arr[Index];
                 }
-            }
-            
+            }            
         }
     }
 }
