@@ -13,6 +13,7 @@ namespace LabWork4_Sharp
     public partial class NewForm : Form
     {
         public int _size;
+        public int _occupied;
         public DrawingCells _cells;
 
 
@@ -49,33 +50,21 @@ namespace LabWork4_Sharp
         }
 
 
-        private bool Check(int neededKol)
-        {
-            int kol = 0;
-            for (int i = 0; i < _cells.arr.Length; i++)
-            {
-                if (_cells.arr[i] == -2) kol++;
-            }
-            if (neededKol <= kol) return true;
-            return false;
-        }
-
-
         private void buttonCreate_Click(object sender, EventArgs e)
         {
-            Random rnd = new Random();
+            Random rnd = new();
             int kolCells = (int)numericUpDown.Value; //кол-во ячеек
                                                      
-            if (Check(kolCells)) //проверка хватает ли места
+            if (kolCells < (_size - _occupied)) //проверка хватает ли места
             {
                 if(Tree.Nodes.Count == 0 || Tree.SelectedNode != null)
                 {
                     string newNodeStr = textBoxCreate.Text; //название node'а берем из текст бокса
                     TreeNode newNode = new(newNodeStr); //создаем новый node 
 
-                    Item newItem = new(newNode); //создаем новый элемент для листа
+                    Item newItem = new(newNode, kolCells); //создаем новый элемент для листа
 
-                    int i = 0;
+                    int i;
                     do 
                     {
                         i = rnd.Next(_cells.arr.Length); //индекс первого кластера
@@ -103,11 +92,13 @@ namespace LabWork4_Sharp
                     if (Tree.Nodes.Count == 0)
                     {
                         Tree.Nodes.Add(newNode);
+                        _occupied += kolCells;
                         list.Add(newItem);
                     }
                     else if (Tree.SelectedNode != null)
                     {
                         Tree.SelectedNode.Nodes.Add(newNode);
+                        _occupied += kolCells;
                         Tree.SelectedNode.ExpandAll(); //раскрываем все Node
                         list.Add(newItem);
                     }                   
@@ -174,7 +165,6 @@ namespace LabWork4_Sharp
             labelNodeCopy.Text = copied.Text;
             Draw(-1);
         }
-
 
 
         //выбор нового места копируемого элемента и копирование

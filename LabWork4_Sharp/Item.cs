@@ -9,11 +9,13 @@ namespace LabWork4_Sharp
     public class Item
     {
         public TreeNode _treeNode { get; private set; }
+        public int KolCells { get; private set; }
         public int cluster = -1;   
 
-        public Item(TreeNode node)
+        public Item(TreeNode node, int kolCells)
         {
             _treeNode = node;
+            KolCells = kolCells;
         }
     }
 }
