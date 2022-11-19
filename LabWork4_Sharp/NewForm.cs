@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace LabWork4_Sharp
 {
@@ -14,11 +15,11 @@ namespace LabWork4_Sharp
     {
         public int _size;
         public int _occupied;
+        public List<int> a;
         public DrawingCells _cells;
 
 
-        List<Item> list;
-        List<Item> copy;
+        public List<Item> list;
         TreeNode selected;
 
         public NewForm(int size)
@@ -106,7 +107,7 @@ namespace LabWork4_Sharp
         {
             for (int i = 0; i < list.Count; i++)
             {
-                if (list[i]._treeNode == e.Node)
+                if (list[i]._treeNode.Equals(e.Node))
                 {
                     Draw(list[i].cluster);
                 }
@@ -152,24 +153,48 @@ namespace LabWork4_Sharp
         {
             if (selected == null) return;
 
+            a = new();
+
             labelCopyTo.Text = Tree.SelectedNode.Text;
             TreeNode clonedNode = (TreeNode)selected.Clone(); //клонировали узел и все его дочерние элементы
-            Tree.Nodes.Add(clonedNode);
+            Tree.SelectedNode.Nodes.Add(clonedNode);
 
-            Item temp = findNodeInList(selected); //находим выбранный для копирования в листе
-            Item cloned = new(temp._treeNode, temp.KolCells); // создаем новый элемент
-            method(temp); //выделяем ячейки для нового элемента
+            //чтобы все отрисовалось, нужно клонированный и все его дочерние узлы добавить в лист
+            Item temp = findNodeInList(selected); //ищем рут, который клонировали, в листе, чтобы посмотреть количество ячеек
+            Item cloned = new(clonedNode, temp.KolCells); // создаем новый элемент листа для клонированного рута
+            method(cloned); //выделяем ячейки для нового элемента
             list.Add(cloned); //добавляем в лист новый элемент
 
-            foreach (TreeNode node in selected.Nodes) 
-            {
-                temp = findNodeInList(node);
-                cloned = new(temp._treeNode, temp.KolCells);
-                method(temp);
-                list.Add(cloned);
-            }
-            
+            method2(selected);
+            method3(clonedNode);
             Draw(-1);
+        }
+
+        // рекурсия, чтобы заполнить лист с количеством ячеек
+        private void method2(TreeNode root)
+        {
+            foreach (TreeNode child in root.Nodes)
+            {
+                if (child.Nodes.Count > 0)
+                    method2(child);
+                Item temp = findNodeInList(child);
+                a.Add(temp.KolCells);
+            }
+        }
+
+        // рекурсия, чтобы заменить ноды
+        private void method3(TreeNode root)
+        {
+            foreach (TreeNode child in root.Nodes)
+            {
+                if (child.Nodes.Count > 0)
+                    method3(child);
+
+                Item newItem = new(child, a[0]);
+                method(newItem);
+                list.Add(newItem);
+                a.RemoveAt(0);
+            }
         }
 
         //подбирает и заполняет ячейки
@@ -223,7 +248,6 @@ namespace LabWork4_Sharp
                     if (list[i]._treeNode == temp || list[i]._treeNode == mainNode)
                     {
                         needed += list[i].KolCells;
-                        copy.Add(list[i]);
                     }
                 }
             }

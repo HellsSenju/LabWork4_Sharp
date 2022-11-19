@@ -8,7 +8,7 @@ namespace LabWork4_Sharp
 {
     public class Item
     {
-        public TreeNode _treeNode { get; private set; }
+        public TreeNode _treeNode { get; set; }
         public int KolCells { get; private set; }
         public int cluster = -1;   
 
