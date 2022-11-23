@@ -46,18 +46,19 @@
             this.labelMoveTo = new System.Windows.Forms.Label();
             this.labelNodeCopy = new System.Windows.Forms.Label();
             this.labelCopyTo = new System.Windows.Forms.Label();
+            this.buttonDeleteNode = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCells)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(10, 541);
+            this.buttonDelete.Location = new System.Drawing.Point(14, 548);
             this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(239, 51);
             this.buttonDelete.TabIndex = 17;
-            this.buttonDelete.Text = "Delete";
+            this.buttonDelete.Text = "Delete All";
             this.buttonDelete.UseVisualStyleBackColor = true;
             this.buttonDelete.Click += new System.EventHandler(this.buttonDelete_Click);
             // 
@@ -232,11 +233,23 @@
             this.labelCopyTo.TabIndex = 29;
             this.labelCopyTo.Text = "_";
             // 
+            // buttonDeleteNode
+            // 
+            this.buttonDeleteNode.Location = new System.Drawing.Point(14, 480);
+            this.buttonDeleteNode.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonDeleteNode.Name = "buttonDeleteNode";
+            this.buttonDeleteNode.Size = new System.Drawing.Size(239, 51);
+            this.buttonDeleteNode.TabIndex = 30;
+            this.buttonDeleteNode.Text = "Delete Node";
+            this.buttonDeleteNode.UseVisualStyleBackColor = true;
+            this.buttonDeleteNode.Click += new System.EventHandler(this.buttonDeleteNode_Click);
+            // 
             // NewForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1112, 856);
+            this.Controls.Add(this.buttonDeleteNode);
             this.Controls.Add(this.labelCopyTo);
             this.Controls.Add(this.labelNodeCopy);
             this.Controls.Add(this.labelMoveTo);
@@ -285,5 +298,6 @@
         private Label labelMoveTo;
         private Label labelNodeCopy;
         private Label labelCopyTo;
+        private Button buttonDeleteNode;
     }
 }

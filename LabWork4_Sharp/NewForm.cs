@@ -257,5 +257,10 @@ namespace LabWork4_Sharp
             }
             return false;
         }
+
+        private void buttonDeleteNode_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
