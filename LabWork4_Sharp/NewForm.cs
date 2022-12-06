@@ -109,6 +109,13 @@ namespace LabWork4_Sharp
             {
                 if (list[i]._treeNode.Equals(e.Node))
                 {
+                    Item item = findNodeInList(e.Node);
+                    int temp = item.cluster;
+                    while(temp != -1)
+                    {
+
+
+                    }
                     Draw(list[i].cluster);
                 }
             }
@@ -260,7 +267,25 @@ namespace LabWork4_Sharp
 
         private void buttonDeleteNode_Click(object sender, EventArgs e)
         {
+            TreeNode deleted = Tree.SelectedNode;
 
+            method4(deleted);
+
+         
+            Draw(-1);
+        }
+
+        //
+        private void method4(TreeNode root)
+        {
+            foreach (TreeNode child in root.Nodes)
+            {
+                if (child.Nodes.Count > 0)
+                    method4(child);
+
+                Item item = findNodeInList(child);
+                list.Remove(item);
+            }
         }
     }
 }
