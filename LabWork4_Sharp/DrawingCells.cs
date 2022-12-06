@@ -18,7 +18,7 @@ namespace LabWork4_Sharp
         private int ost;
         private int lineSize;
 
-        public int[] arr;
+        public int[] _cells;
         // -1 - конец связанного 
         // -2 - незанятая 
 
@@ -26,29 +26,49 @@ namespace LabWork4_Sharp
         {
             picWidth = pictureBoxWidth;
             picHeight = pictureBoxHeight;
-            arr = new int[size];
-            for (int i = 0; i < arr.Length; i++)
-            {
-                arr[i] = -2;
-            }
+            _cells = new int[size];
             lineSize = picWidth / cellsSize;
             //TODO проверка на то, что хватит места для отрисовки
             ost = size - ((size / lineSize * lineSize));
         }
 
-        public void Drawing(Graphics g, List<Item> files, int Index)
-        {           
+        public void DrawingSelected(Graphics g, List<int> indexes, List<Item> list)
+        {
+            DrawingGray(g);
+            Drawing(g, list);
+
+            Pen pen = new(Color.Black);
+            Brush brRed = new SolidBrush(Color.Red);
+            int i, j;
+
+            foreach (int index in indexes)
+            {
+                if (index < lineSize)
+                {
+                    i = index;
+                    j = 0;
+                }
+                else
+                {
+                    j = index / lineSize;
+                    i = index - (lineSize * j);
+                }
+                g.FillRectangle(brRed, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+            }
+        }
+
+        public void DrawingGray(Graphics g)
+        {
             Pen pen = new(Color.Black);
             Brush br = new SolidBrush(Color.LightGray);
-            Brush brBlue = new SolidBrush(Color.Blue);
-            Brush brRed = new SolidBrush(Color.Red);
 
             int j = 0;
             int i = 0;
-            int kol = 0;            
-            while(kol < arr.Length)
+            int kol = 0;
+            while (kol < _cells.Length)
             {
-                if(i == lineSize)
+                if (i == lineSize)
                 {
                     j++;
                     i = 0;
@@ -58,32 +78,39 @@ namespace LabWork4_Sharp
                 i++;
                 kol++;
             }
+        }
 
-            int index;
-            for(int l = 0; l < files.Count; l++)
+        public void Drawing(Graphics g, List<Item> list)
+        {
+            DrawingGray(g);
+            Pen pen = new(Color.Black);
+            Brush brBlue = new SolidBrush(Color.Blue);
+            int i, j;
+            foreach (Item item in list)
             {
-                if (files[l] != null)
+                foreach(int index in item._cells)
                 {
-                    index = files[l].cluster;
-                    while (true)
+                    if (index < lineSize)
                     {
-                        if (index < lineSize)
-                        {
-                            i = index;
-                            j = 0;
-                        }
-                        else
-                        {
-                            j = index / lineSize;
-                            i = index - (lineSize * j);
-                        }
-                        g.FillRectangle(brBlue, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                        g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                        if (arr[index] == -1) break;
-                        index = arr[index];
+                        i = index;
+                        j = 0;
                     }
-                }               
+                    else
+                    {
+                        j = index / lineSize;
+                        i = index - (lineSize * j);
+                    }
+                    g.FillRectangle(brBlue, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                    g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
+                }  
             }
+        }
+
+/*        public void Drawing(Graphics g, List<Item> files, int Index)
+        {           
+            
+            Brush brRed = new SolidBrush(Color.Red);
+
             if (Index != -1)
             {
                 while (true)
@@ -100,10 +127,10 @@ namespace LabWork4_Sharp
                     }
                     g.FillRectangle(brRed, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
                     g.DrawRectangle(pen, i * cellsSize, j * cellsSize, cellsSize, cellsSize);
-                    if (arr[Index] == -1) break;
-                    Index = arr[Index];
+                    if (_cells[Index] == -1) break;
+                    Index = _cells[Index];
                 }
             }            
-        }
+        }*/
     }
 }
